@@ -10,8 +10,7 @@
 
 /**
  * 【重要設定】Google Apps Script 部署之 Web App 應用程式網址
- * 說明：請將下方網址替換為您在 Google 試算表中「部署為網頁應用程式 (Web App)」所取得的實際 URL。
- * 格式範例：https://script.google.com/macros/s/AKfycbx.../exec
+ * 說明：串接後端 Google 試算表就貸審查結果查詢 API
  */
 const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxca-L0Nwdb5IrfiJrU1PQ1MSZvoAHcJvxXNWNf1SQ350U_KJ8ZaEsgQKwmxCXcuTWPRg/exec";
 

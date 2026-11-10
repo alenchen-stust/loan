@@ -1,19 +1,35 @@
-# Python 快取
+# ==============================================================================
+# .gitignore - 就學貸款審查結果線上查詢系統
+# 說明：本 GitHub 儲存庫專供託管「學生端線上查詢系統」，
+#      內部後端 NAS 服務、GAS 業務腳本與敏感個資單據皆予以排除不公開。
+# ==============================================================================
+
+# 內部後端 Python 服務與容器設定
+app.py
+app-1.py
+Dockerfile
+docker-compose.yml
+requirements.txt
+test_loan_system.py
 __pycache__/
 *.py[cod]
 *$py.class
 
-# 學生真實 PDF 單據（保護學生個資，嚴防身分證與敏感資料上傳至公開儲存庫）
+# Google Apps Script 雲端業務腳本 (內部維護)
+google_apps_script/
+
+# 內部系統規劃書、維護手冊與測試記錄檔
+學生就學貸款PDF自動化處理規劃書.txt
+SYSTEM_DOCS.md
+result*.txt
+*.log
+
+# 本地前端備份資料夾 (根目錄已有最新網頁檔案)
+frontend/
+
+# 學生真實 PDF 單據（避免個人資料外洩）
 *.pdf
 
-# 測試用臨時文字與記錄
-*.log
-result*.txt
-
-# 暫存備份檔案
-app-1.py
-
-# 系統隱藏檔
+# 系統暫存與快取檔案
 .DS_Store
 Thumbs.db
-

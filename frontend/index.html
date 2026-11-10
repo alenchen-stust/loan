@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>就學貸款審查結果線上查詢系統 | 南臺科技大學學務處課外活動組</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google 字型 (Noto Sans TC) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- 頁頭標題區塊 -->
+    <header class="header">
+      <div class="logo-area">
+        <h1>南臺科技大學 學務處課外活動組</h1>
+        <h2>就學貸款申貸資料審查結果 線上即時查詢系統</h2>
+      </div>
+      <p class="subtitle">輸入學號即可快速查詢您的就貸資料初審結果與狀態</p>
+    </header>
+
+    <!-- 查詢輸入卡片區塊 -->
+    <main class="card search-card">
+      <form id="searchForm" class="search-form" onsubmit="handleSearch(event)">
+        <div class="form-group">
+          <label for="studentIdInput">學生學號：</label>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="studentIdInput" 
+              name="studentId" 
+              placeholder="請輸入完整學號 (例如：4B3B0099)" 
+              required 
+              autocomplete="off"
+              maxlength="15"
+            >
+            <button type="submit" id="searchBtn" class="btn btn-primary">
+              <span class="btn-text">立即查詢</span>
+              <span class="btn-loader" style="display: none;">查詢中...</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- 系統公告與溫馨提醒 -->
+      <div class="notice-box">
+        <h4>📌 查詢注意事項：</h4>
+        <ul>
+          <li>本系統查詢結果每 10 分鐘同步一次，若剛於表單提交，請稍候 1~2 分鐘。</li>
+          <li>查詢結果僅顯示學號、班級、遮罩姓名與初審狀態，確保個人資料安全。</li>
+          <li>若審查狀態為「【審查不通過】」，請詳閱不符原因並依系統發送至您信箱之郵件指引辦理補正。</li>
+        </ul>
+      </div>
+    </main>
+
+    <!-- 查詢結果展示區塊 (預設隱藏，查詢後動態顯示) -->
+    <section id="resultSection" class="card result-card" style="display: none;">
+      <div class="result-header">
+        <h3 id="resultTitle">審查結果報告</h3>
+        <span id="resultBadge" class="status-badge">審查中</span>
+      </div>
+
+      <div class="result-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">審核序號</span>
+            <span id="resSerialNo" class="info-value" style="font-family: monospace; font-weight: bold; color: #1565c0;">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">學年度 / 學期</span>
+            <span id="resTerm" class="info-value">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">就讀班級</span>
+            <span id="resClass" class="info-value">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">學號</span>
+            <span id="resStudentId" class="info-value">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">學生姓名</span>
+            <span id="resName" class="info-value">-</span>
+          </div>
+          <div class="info-item full-width">
+            <span class="info-label">審查詳細說明</span>
+            <div id="resDetail" class="detail-box">-</div>
+          </div>
+          <div class="info-item full-width">
+            <span class="info-label">系統審查時間</span>
+            <span id="resTime" class="info-value text-muted">-</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 錯誤提示訊息 (查無資料或連線異常) -->
+    <div id="errorSection" class="alert alert-warning" style="display: none;">
+      <p id="errorMessage">查無此學號之送審資料，請確認輸入是否正確。</p>
+    </div>
+
+    <!-- 頁尾宣告與連結 -->
+    <footer class="footer">
+      <p>南臺科技大學 學務處課外活動組 版權所有 © 2026</p>
+      <p>若對就學貸款有任何疑問，請親洽 L101 辦公室或參閱學校就貸專區</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

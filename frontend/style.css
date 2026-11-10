@@ -1,0 +1,322 @@
+/**
+ * ==============================================================================
+ * 檔案名稱：style.css
+ * 專案名稱：就學貸款審查結果線上查詢系統 - 前端樣式表
+ * 說明：
+ *    本樣式表提供現代化、乾淨清爽的卡片式介面設計，支援行動裝置與電腦桌面自適應。
+ * ==============================================================================
+ */
+
+/* 全域變數與主題色彩定義 */
+:root {
+  --primary-color: #1565c0;       /* 主題藍色 */
+  --primary-hover: #0d47a1;       /* 滑鼠懸停深藍色 */
+  --success-color: #2e7d32;       /* 審查通過綠色 */
+  --success-bg: #e8f5e9;          /* 通過背景淺綠 */
+  --danger-color: #c62828;        /* 審查未通過紅色 */
+  --danger-bg: #ffebee;           /* 未通過背景淺紅 */
+  --warning-color: #ef6c00;       /* 警告提示橘色 */
+  --warning-bg: #fff3e0;          /* 警告背景淺橘 */
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  --card-bg: #ffffff;
+  --text-primary: #2c3e50;
+  --text-secondary: #5a6b7c;
+  --text-muted: #8898aa;
+  --border-color: #e2e8f0;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 基礎重設 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 16px;
+}
+
+/* 主容器排版 */
+.container {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* 頁頭區塊 */
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-area h1 {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.logo-area h2 {
+  font-size: 1.75rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* 卡片共用樣式 */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 查詢表單樣式 */
+.search-form {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+.input-wrapper input {
+  flex: 1;
+  padding: 14px 18px;
+  font-size: 1.05rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  text-transform: uppercase;
+}
+
+.input-wrapper input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.15);
+}
+
+/* 按鈕樣式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* 提示與注意事項框 */
+.notice-box {
+  background-color: #f8fafc;
+  border-left: 4px solid var(--primary-color);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.notice-box h4 {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.notice-box ul {
+  padding-left: 18px;
+  line-height: 1.6;
+}
+
+/* 查詢結果卡片樣式 */
+.result-card {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.result-header h3 {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+}
+
+/* 狀態徽章 */
+.status-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 20px;
+}
+
+.status-badge.pass {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+  border: 1px solid #c8e6c9;
+}
+
+.status-badge.fail {
+  background-color: var(--danger-bg);
+  color: var(--danger-color);
+  border: 1px solid #ffcdd2;
+}
+
+/* 資訊網格排版 */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item.full-width {
+  grid-column: span 2;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.info-value {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.detail-box {
+  background-color: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: var(--text-primary);
+}
+
+.detail-box.pass {
+  background-color: var(--success-bg);
+  color: var(--success-color);
+  border-color: #c8e6c9;
+  font-weight: 600;
+}
+
+.detail-box.fail {
+  background-color: var(--danger-bg);
+  color: var(--danger-color);
+  border-color: #ffcdd2;
+}
+
+/* 警告與錯誤區塊 */
+.alert {
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.alert-warning {
+  background-color: var(--warning-bg);
+  color: var(--warning-color);
+  border: 1px solid #ffe0b2;
+}
+
+/* 頁尾 */
+.footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+/* 淡入動畫 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 行動裝置響應式調整 */
+@media (max-width: 600px) {
+  body {
+    padding: 20px 12px;
+  }
+  .input-wrapper {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+  }
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .info-item.full-width {
+    grid-column: span 1;
+  }
+  .logo-area h2 {
+    font-size: 1.4rem;
+  }
+}
+

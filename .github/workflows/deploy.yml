@@ -1,0 +1,59 @@
+# ==============================================================================
+# 工作流程名稱：GitHub Pages 自動化部署
+# 專案名稱：就學貸款審查結果線上查詢系統
+# 說明：
+#    當程式碼推送到 main 分支，或手動點擊觸發時，
+#    自動將 frontend/ 目錄下的靜態網頁（HTML/CSS/JS）打包並發布至 GitHub Pages。
+# ==============================================================================
+
+name: 部署就貸查詢系統至 GitHub Pages
+
+# 觸發條件設定
+on:
+  push:
+    branches:
+      - main           # 當 main 分支有程式碼推送 (push) 時自動觸發
+    paths:
+      - 'frontend/**'  # 僅在 frontend 目錄或本工作流程檔有修改時觸發
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:   # 允許維護者在 GitHub 網頁 Actions 介面中手動點擊「Run workflow」觸發
+
+# 設定 GITHUB_TOKEN 的權限，允許部署至 GitHub Pages
+permissions:
+  contents: read      # 允許讀取儲存庫程式碼
+  pages: write        # 允許寫入與部署 GitHub Pages
+  id-token: write     # 允許 OIDC 認證
+
+# 限制同一時間只能有一個部署任務在執行，避免競態衝突
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # 部署作業
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 步驟 1：檢出 (Checkout) 儲存庫專案代碼
+      - name: 檢出儲存庫代碼
+        uses: actions/checkout@v4
+
+      # 步驟 2：設定與初始化 GitHub Pages 環境
+      - name: 設定 GitHub Pages
+        uses: actions/configure-pages@v4
+
+      # 步驟 3：將 frontend/ 目錄上傳為 Pages Artifact
+      - name: 打包上傳 frontend 靜態網頁資源
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # 指定欲部署的靜態網頁目錄路徑
+          path: './frontend'
+
+      # 步驟 4：發布至 GitHub Pages
+      - name: 正式發布至 GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+

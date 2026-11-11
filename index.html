@@ -1,18 +1,37 @@
 <!DOCTYPE html>
+<!--
+================================================================================
+檔案名稱：index.html
+專案名稱：就學貸款審查結果線上查詢系統 - 前端入口網頁
+用途說明：
+  提供學生透過輸入個人學號，即時查詢南臺科技大學學務處課外活動組之
+  就學貸款申貸資料初審進度與結果報告（包含審核序號、遮罩姓名、未通過原因等）。
+架構關係：
+  - 樣式渲染：載入同目錄下之 style.css 與 Google Noto Sans TC 繁體中文字型
+  - 互動邏輯：載入同目錄下之 app.js，透過 Fetch API (CORS) 向 Google Apps Script
+              Web App (Code.js 之 doGet) 發送 GET 請求取得即時審查資料。
+================================================================================
+-->
 <html lang="zh-TW">
 <head>
+  <!-- 指定網頁字元編碼為 UTF-8，確保繁體中文與特殊符號正確顯示 -->
   <meta charset="UTF-8">
+  <!-- 設定響應式網頁視口 (RWD)，依據裝置螢幕寬度自動縮放，初始比例為 1.0 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 瀏覽器分頁標題 -->
   <title>就學貸款審查結果線上查詢系統 | 南臺科技大學學務處課外活動組</title>
+  <!-- 引入自訂前端樣式表，控制卡片佈局、色彩主題與行動裝置版面適配 -->
   <link rel="stylesheet" href="style.css">
-  <!-- Google 字型 (Noto Sans TC) -->
+  <!-- 預先連線至 Google Fonts 伺服器，加速後續字型檔下載 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- 載入思源黑體 (Noto Sans TC) 之常規(400)、中等(500)、粗體(700) 字重 -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- 主頁面置中容器：限制最大寬度為 720px，保持桌面與手機良好閱讀體驗 -->
   <div class="container">
-    <!-- 頁頭標題區塊 -->
+    <!-- ==================== 頁頭標題區塊 (Header) ==================== -->
     <header class="header">
       <div class="logo-area">
         <h1>南臺科技大學 學務處課外活動組</h1>
@@ -21,12 +40,24 @@
       <p class="subtitle">輸入學號即可快速查詢您的就貸資料初審結果與狀態</p>
     </header>
 
-    <!-- 查詢輸入卡片區塊 -->
+    <!-- ==================== 查詢輸入卡片區塊 (Main Search Card) ==================== -->
     <main class="card search-card">
+      <!--
+        查詢表單 (#searchForm)：
+        綁定 onsubmit="handleSearch(event)" 事件，由 app.js 攔截送出動作改以非同步 API 查詢。
+      -->
       <form id="searchForm" class="search-form" onsubmit="handleSearch(event)">
         <div class="form-group">
+          <!-- for="studentIdInput" 提升無障礙點擊焦點體驗 -->
           <label for="studentIdInput">學生學號：</label>
           <div class="input-wrapper">
+            <!--
+              學號輸入框 (#studentIdInput)：
+              - type="text": 允許輸入英數字混合學號（如 4B3B0099）
+              - required: 瀏覽器原生必填欄位驗證，避免送出空字串
+              - autocomplete="off": 關閉瀏覽器自動記憶填寫，保護共用電腦查詢時之個人隱私
+              - maxlength="15": 限制最大字元長度，防止過長異常輸入
+            -->
             <input 
               type="text" 
               id="studentIdInput" 
@@ -36,6 +67,10 @@
               autocomplete="off"
               maxlength="15"
             >
+            <!--
+              查詢送出按鈕 (#searchBtn)：
+              內含兩個 span 供 app.js 動態切換「平時 (.btn-text)」與「請求中 (.btn-loader)」狀態，防止重複點擊。
+            -->
             <button type="submit" id="searchBtn" class="btn btn-primary">
               <span class="btn-text">立即查詢</span>
               <span class="btn-loader" style="display: none;">查詢中...</span>
@@ -44,50 +79,60 @@
         </div>
       </form>
 
-      <!-- 系統公告與溫馨提醒 -->
+      <!-- 系統公告與學生查詢溫馨提醒區塊 -->
       <div class="notice-box">
         <h4>📌 查詢注意事項：</h4>
         <ul>
-          <li>本系統查詢結果每 10 分鐘同步一次，若剛於表單提交，請稍候 1~2 分鐘。</li>
+          <li>本系統與審查試算表即時連動，若剛於表單提交，系統需約 1 分鐘進行 PDF 解析與自動審核，請稍候再查詢。</li>
           <li>查詢結果僅顯示學號、班級、遮罩姓名與初審狀態，確保個人資料安全。</li>
           <li>若審查狀態為「【審查不通過】」，請詳閱不符原因並依系統發送至您信箱之郵件指引辦理補正。</li>
         </ul>
       </div>
     </main>
 
-    <!-- 查詢結果展示區塊 (預設隱藏，查詢後動態顯示) -->
+    <!-- ==================== 查詢結果展示區塊 (Result Card) ==================== -->
+    <!-- 預設透過 inline style display: none 隱藏；查詢成功取得 JSON 資料後由 app.js renderResult() 顯示 -->
     <section id="resultSection" class="card result-card" style="display: none;">
       <div class="result-header">
         <h3 id="resultTitle">審查結果報告</h3>
+        <!-- 狀態徽章 (#resultBadge)：依審查結果動態切換 .pass (綠色) 或 .fail (紅色) 樣式 -->
         <span id="resultBadge" class="status-badge">審查中</span>
       </div>
 
       <div class="result-body">
+        <!-- 兩欄式 RWD 網格佈局：桌面顯示兩欄，手機版自動折疊為單欄 -->
         <div class="info-grid">
+          <!-- 欄位 1：審核序號（對應後端 serial_no，採用等寬字型 monospace 提升辨識度） -->
           <div class="info-item">
             <span class="info-label">審核序號</span>
             <span id="resSerialNo" class="info-value" style="font-family: monospace; font-weight: bold; color: #1565c0;">-</span>
           </div>
+          <!-- 欄位 2：學年度與學期（對應後端 year 與 semester 組合字串） -->
           <div class="info-item">
             <span class="info-label">學年度 / 學期</span>
             <span id="resTerm" class="info-value">-</span>
           </div>
+          <!-- 欄位 3：學生就讀班級（對應後端 student_class） -->
           <div class="info-item">
             <span class="info-label">就讀班級</span>
             <span id="resClass" class="info-value">-</span>
           </div>
+          <!-- 欄位 4：學生學號（對應後端 student_id） -->
           <div class="info-item">
             <span class="info-label">學號</span>
             <span id="resStudentId" class="info-value">-</span>
           </div>
+          <!-- 欄位 5：去識別化遮罩後姓名（對應後端 student_name，例：王○明） -->
           <div class="info-item">
             <span class="info-label">學生姓名</span>
             <span id="resName" class="info-value">-</span>
           </div>
+          <!-- 欄位 6：審查詳細說明（.full-width 跨兩欄顯示完整通過賀詞或條列式不通過補正說明） -->
           <div class="info-item full-width">
             <span class="info-label">審查詳細說明</span>
             <div id="resDetail" class="detail-box">-</div>
           </div>
+          <!-- 欄位 7：系統完成自動審查之時間戳記（對應後端 review_time） -->
           <div class="info-item full-width">
             <span class="info-label">系統審查時間</span>
             <span id="resTime" class="info-value text-muted">-</span>
@@ -96,19 +141,20 @@
       </div>
     </section>
 
-    <!-- 錯誤提示訊息 (查無資料或連線異常) -->
+    <!-- ==================== 錯誤/查無資料提示區塊 (Error Alert) ==================== -->
+    <!-- 預設隱藏；當後端回傳 not_found 或網路請求失敗時，由 app.js showError() 寫入 #errorMessage 並顯示 -->
     <div id="errorSection" class="alert alert-warning" style="display: none;">
       <p id="errorMessage">查無此學號之送審資料，請確認輸入是否正確。</p>
     </div>
 
-    <!-- 頁尾宣告與連結 -->
+    <!-- ==================== 頁尾宣告區塊 (Footer) ==================== -->
     <footer class="footer">
       <p>南臺科技大學 學務處課外活動組 版權所有 © 2026</p>
       <p>若對就學貸款有任何疑問，請親洽 L101 辦公室或參閱學校就貸專區</p>
     </footer>
   </div>
 
+  <!-- 引入前端邏輯腳本：放置於 body 結尾確保 DOM 元素已完整載入後方執行綁定 -->
   <script src="app.js"></script>
 </body>
 </html>
-

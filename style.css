@@ -3,60 +3,63 @@
  * 檔案名稱：style.css
  * 專案名稱：就學貸款審查結果線上查詢系統 - 前端樣式表
  * 說明：
- *    本樣式表提供現代化、乾淨清爽的卡片式介面設計，支援行動裝置與電腦桌面自適應。
+ *    本樣式表使用純 CSS3（含 CSS Custom Properties 與 CSS Grid / Flexbox），
+ *    為前端查詢網頁提供現代化、乾淨清爽的卡片式介面設計，並透過 @media
+ *    媒體查詢支援行動裝置（寬度 <= 600px）與電腦桌面自適應排版。
  * ==============================================================================
  */
 
-/* 全域變數與主題色彩定義 */
+/* ==================== 1. 全域 CSS 變數與主題色彩定義 ==================== */
 :root {
-  --primary-color: #1565c0;       /* 主題藍色 */
+  --primary-color: #1565c0;       /* 系統主色調：深海藍（用於標題、按鈕、Focus 框） */
   --primary-hover: #0d47a1;       /* 滑鼠懸停深藍色 */
-  --success-color: #2e7d32;       /* 審查通過綠色 */
-  --success-bg: #e8f5e9;          /* 通過背景淺綠 */
-  --danger-color: #c62828;        /* 審查未通過紅色 */
-  --danger-bg: #ffebee;           /* 未通過背景淺紅 */
-  --warning-color: #ef6c00;       /* 警告提示橘色 */
+  --success-color: #2e7d32;       /* 審查通過文字綠 */
+  --success-bg: #e8f5e9;          /* 審查通過背景淺綠 */
+  --danger-color: #c62828;        /* 審查未通過文字紅 */
+  --danger-bg: #ffebee;           /* 審查未通過背景淺紅 */
+  --warning-color: #ef6c00;       /* 查無資料/連線異常提示橘 */
   --warning-bg: #fff3e0;          /* 警告背景淺橘 */
-  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-  --card-bg: #ffffff;
-  --text-primary: #2c3e50;
-  --text-secondary: #5a6b7c;
-  --text-muted: #8898aa;
-  --border-color: #e2e8f0;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); /* 柔和斜角灰藍漸層背景 */
+  --card-bg: #ffffff;             /* 卡片純白背景 */
+  --text-primary: #2c3e50;        /* 主要文字深炭灰 */
+  --text-secondary: #5a6b7c;      /* 次要說明灰藍色 */
+  --text-muted: #8898aa;          /* 輔助標籤淺灰色 */
+  --border-color: #e2e8f0;        /* 卡片與輸入框邊框色 */
+  --radius-sm: 6px;               /* 小圓角 */
+  --radius-md: 10px;              /* 中圓角（輸入框、按鈕、提示框） */
+  --radius-lg: 16px;              /* 大圓角（主卡片容器） */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-/* 基礎重設 */
+/* ==================== 2. 基礎 CSS Reset 與 Body 佈局 ==================== */
 * {
-  box-sizing: border-box;
+  box-sizing: border-box;         /* 確保 padding 與 border 計入元件總寬高，避免跑版 */
   margin: 0;
   padding: 0;
 }
 
 body {
+  /* 字型堆疊：優先使用載入的思源黑體 Noto Sans TC，並降級支援各系統預設無襯線字體 */
   font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: var(--bg-gradient);
   color: var(--text-primary);
-  min-height: 100vh;
+  min-height: 100vh;              /* 最小高度撐滿整個瀏覽器可視高度 */
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: center;        /* 水平置中 */
+  align-items: flex-start;        /* 靠上對齊，避免查詢卡片出現後畫面過度跳動 */
   padding: 40px 16px;
 }
 
-/* 主容器排版 */
+/* 主內容限寬容器 */
 .container {
   width: 100%;
-  max-width: 720px;
+  max-width: 720px;               /* 桌機版最佳閱讀寬度上限 */
   margin: 0 auto;
 }
 
-/* 頁頭區塊 */
+/* ==================== 3. 頁頭標題區塊樣式 ==================== */
 .header {
   text-align: center;
   margin-bottom: 24px;
@@ -82,7 +85,7 @@ body {
   margin-top: 8px;
 }
 
-/* 卡片共用樣式 */
+/* ==================== 4. 通用卡片容器與查詢表單樣式 ==================== */
 .card {
   background: var(--card-bg);
   border-radius: var(--radius-lg);
@@ -93,7 +96,6 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 查詢表單樣式 */
 .search-form {
   margin-bottom: 20px;
 }
@@ -106,28 +108,30 @@ body {
   color: var(--text-primary);
 }
 
+/* 輸入框與查詢按鈕採用彈性橫向並排 */
 .input-wrapper {
   display: flex;
   gap: 12px;
 }
 
 .input-wrapper input {
-  flex: 1;
+  flex: 1;                        /* 自動撐滿按鈕以外剩餘空間 */
   padding: 14px 18px;
   font-size: 1.05rem;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-md);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  text-transform: uppercase;
+  text-transform: uppercase;      /* 視覺上自動將小寫英文字母顯示為大寫，符合學號格式 */
 }
 
+/* 輸入框取得焦點時的藍色邊框與外發光提示 */
 .input-wrapper input:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.15);
 }
 
-/* 按鈕樣式 */
+/* ==================== 5. 按鈕與互動回饋樣式 ==================== */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -139,7 +143,7 @@ body {
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
-  white-space: nowrap;
+  white-space: nowrap;            /* 禁止按鈕文字換行 */
 }
 
 .btn-primary {
@@ -151,11 +155,18 @@ body {
   background-color: var(--primary-hover);
 }
 
+/* 點擊瞬間微幅縮小產生按壓觸感 */
 .btn-primary:active {
   transform: scale(0.98);
 }
 
-/* 提示與注意事項框 */
+/* 查詢請求發送期間停用狀態視覺區隔 */
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ==================== 6. 注意事項提醒框 ==================== */
 .notice-box {
   background-color: #f8fafc;
   border-left: 4px solid var(--primary-color);
@@ -176,7 +187,7 @@ body {
   line-height: 1.6;
 }
 
-/* 查詢結果卡片樣式 */
+/* ==================== 7. 查詢結果展示卡片與動態狀態樣式 ==================== */
 .result-card {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -195,7 +206,7 @@ body {
   color: var(--text-primary);
 }
 
-/* 狀態徽章 */
+/* 膠囊狀審查狀態徽章 */
 .status-badge {
   display: inline-block;
   padding: 6px 14px;
@@ -216,10 +227,10 @@ body {
   border: 1px solid #ffcdd2;
 }
 
-/* 資訊網格排版 */
+/* 學生資料雙欄網格 */
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* 兩欄等寬分配 */
   gap: 16px;
 }
 
@@ -228,6 +239,7 @@ body {
   flex-direction: column;
 }
 
+/* 跨越多欄顯示區塊（用於審查詳細說明與系統審查時間） */
 .info-item.full-width {
   grid-column: span 2;
 }
@@ -244,6 +256,7 @@ body {
   color: var(--text-primary);
 }
 
+/* 審查明細顯示框：使用 pre-wrap 保留後端輸出的換行符號與項目符號縮排 */
 .detail-box {
   background-color: #f8fafc;
   border: 1px solid var(--border-color);
@@ -268,7 +281,7 @@ body {
   border-color: #ffcdd2;
 }
 
-/* 警告與錯誤區塊 */
+/* ==================== 8. 警告提示、頁尾與進場動畫 ==================== */
 .alert {
   padding: 16px 20px;
   border-radius: var(--radius-md);
@@ -283,7 +296,6 @@ body {
   border: 1px solid #ffe0b2;
 }
 
-/* 頁尾 */
 .footer {
   text-align: center;
   font-size: 0.85rem;
@@ -292,23 +304,25 @@ body {
   margin-top: 20px;
 }
 
-/* 淡入動畫 */
+/* 結果/警告區塊出現時的平滑上浮淡入關鍵影格動畫 */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 行動裝置響應式調整 */
+/* ==================== 9. 行動裝置響應式調整 (RWD <= 600px) ==================== */
 @media (max-width: 600px) {
   body {
     padding: 20px 12px;
   }
+  /* 輸入框與按鈕改為上下堆疊 */
   .input-wrapper {
     flex-direction: column;
   }
   .btn {
     width: 100%;
   }
+  /* 資訊網格由兩欄改為單欄呈現，避免窄螢幕擠壓文字 */
   .info-grid {
     grid-template-columns: 1fr;
   }
@@ -319,4 +333,3 @@ body {
     font-size: 1.4rem;
   }
 }
-
